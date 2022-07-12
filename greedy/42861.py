@@ -4,7 +4,7 @@ def solution(n, costs):
     
     nodes = [i for i in range(n)]
     costs = sorted(costs, key=lambda x: x[2])
-    print(nodes); print(costs)
+    # print(nodes); print(costs)
     
     for n1, n2, c in costs:
         p_n1, p_n2 = nodes[n1], nodes[n2]
