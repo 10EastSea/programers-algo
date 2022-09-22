@@ -9,37 +9,40 @@ def solution(n, paths, gates, summits):
     # 그래프 생성
     graph = defaultdict(list)
     for i, j, w in paths:
-        graph[i].append((j, w))
-        graph[j].append((i, w))
+        graph[i].append((w, j))
+        graph[j].append((w, i))
+    for key, value in graph.items(): value.sort()
     # print(graph)
     
     # 다익스트라
     summit_num, min_intensity = -1, 10000001
     for g in gates:
         climb = [10000001 for _ in range(n+1)]
+        climb[g] = 0
         visited = [0 for _ in range(n+1)]
-        summit_num, min_intensity = -1, 10000001
-        
         visited[g] = 1
+        
         que = deque([g])
         while que:
             here = que.popleft()
+            visited[here] = 1
+            if here in summits: continue
             
-            for n, w in graph[here]:
-                if climb[n] > w: climb[n] = w
-                
-                if n in summits:
-                    summit_num = n
-                    min_intensity = climb[n]
-                else:
-                    if visited[n] == 0:
-                        visited[n] = 1
-                        que.append(n)
-                
-        print(g, climb)
-    print(summit_num, min_intensity)
-    
+            for weight, next_node in graph[here]:
+                if climb[next_node] > max(weight, climb[here]): climb[next_node] = max(weight, climb[here])
+                if visited[next_node] != 1: que.append(next_node)
+        # print(g, climb)
+        
+        for s in summits:
+            if min_intensity > climb[s]:
+                summit_num = s
+                min_intensity = climb[s]
+    # print(summit_num, min_intensity)
+
+    answer.append(summit_num)
+    answer.append(min_intensity)
     return answer
+
 
 # def solution(n, paths, gates, summits):
 #     answer = []
