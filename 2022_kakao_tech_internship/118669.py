@@ -20,6 +20,7 @@ def solution(n, paths, gates, summits):
         visited = [0 for _ in range(n+1)]
         summit_num, min_intensity = -1, 10000001
         
+        visited[g] = 1
         que = deque([g])
         while que:
             here = que.popleft()
